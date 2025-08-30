@@ -1,8 +1,10 @@
 'use server'
 
 import Routes from '@lib/constants/routes.constants'
+import authService from '@lib/services/auth/auth.service'
 import { userService } from '@lib/services/user'
 import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
 import { z } from 'zod'
 
 const schema = z.object({
@@ -21,4 +23,52 @@ export const deleteUser = async (_prev: unknown, formData: FormData) => {
   } catch (err) {
     throw new Error(`Delete user failed: ${err}`)
   }
+}
+
+const formSchema = z
+  .object({
+    name: z.string().trim().min(1),
+    email: z.email().transform((v) => v.trim().toLowerCase()),
+    password: z.string().min(8),
+    confirmPassword: z.string().min(8),
+  })
+  .refine((d) => d.password === d.confirmPassword, {
+    message: 'Passwords do not match',
+    path: ['confirmPassword'],
+  })
+
+export const createUser = async (_prev: unknown, formData: FormData) => {
+  const raw = {
+    name: String(formData.get('name') ?? ''),
+    email: String(formData.get('email') ?? ''),
+    password: String(formData.get('password') ?? ''),
+    confirmPassword: String(formData.get('confirmPassword') ?? ''),
+  }
+
+  const parsed = formSchema.safeParse(raw)
+  if (!parsed.success) return { error: 'Invalid data' }
+  const { name, email, password } = parsed.data
+
+  const username = `${email.split('@')[0]}${Math.floor(Math.random() * 10000)}`.toLowerCase()
+
+  try {
+    const exists = await userService.getUserByEmail(email)
+    if (exists) return { error: 'User already exists' }
+
+    const hashedPassword = await authService.hashPassword({ password })
+
+    await userService.createUser({
+      name,
+      email,
+      username,
+      password: hashedPassword,
+    })
+
+    const user = await userService.getUserByEmail(email)
+    if (!user) throw new Error('User creation failed')
+  } catch (err) {
+    throw new Error(`Registration failed: ${err}`)
+  }
+
+  redirect(`${Routes.DASHBOARD}/users`)
 }

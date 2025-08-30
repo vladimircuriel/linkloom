@@ -9,7 +9,7 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
 
-export const login = async (_prev: any, formData: FormData) => {
+export const login = async (_prev: unknown, formData: FormData) => {
   const rawEmail = String(formData.get('email') ?? '')
   const password = String(formData.get('password') ?? '')
 
@@ -57,7 +57,7 @@ const formSchema = z
     path: ['confirmPassword'],
   })
 
-export const register = async (_prev: any, formData: FormData) => {
+export const register = async (_prev: unknown, formData: FormData) => {
   const raw = {
     name: String(formData.get('name') ?? ''),
     email: String(formData.get('email') ?? ''),
