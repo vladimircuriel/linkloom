@@ -84,7 +84,14 @@ export const register = async (_prev: any, formData: FormData) => {
       password: hashedPassword,
     })
 
-    await auth.createSession({ sub: email, email })
+    const user = await userService.getUserByEmail(email)
+    if (!user) throw new Error('User creation failed')
+    await auth.createSession({
+      sub: String(user._id),
+      id: user._id,
+      email: user.email,
+      isAdmin: user.isAdmin,
+    })
   } catch (err) {
     throw new Error(`Registration failed: ${err}`)
   }
