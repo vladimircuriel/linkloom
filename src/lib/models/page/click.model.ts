@@ -1,17 +1,18 @@
-import mongoose from 'mongoose'
+import { type InferSchemaType, type Model, model, models, Schema, type Types } from 'mongoose'
 
-export interface Click extends mongoose.Document {
-  clicks: number
-}
-
-const ClickSchema = new mongoose.Schema<Click>(
+const ClickSchema = new Schema(
   {
     clicks: {
       type: Number,
       default: 0,
+      min: 0,
     },
   },
-  { timestamps: true },
+  { timestamps: true, strict: true, versionKey: false },
 )
 
-export default mongoose.models.Click || mongoose.model<Click>('Click', ClickSchema)
+export type ClickDoc = InferSchemaType<typeof ClickSchema> & { _id: Types.ObjectId }
+export const ClickModel: Model<ClickDoc> =
+  (models.Click as Model<ClickDoc>) || model<ClickDoc>('Click', ClickSchema)
+
+export default ClickModel

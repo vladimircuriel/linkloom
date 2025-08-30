@@ -1,17 +1,22 @@
-import mongoose from 'mongoose'
+import { type InferSchemaType, type Model, model, models, Schema, type Types } from 'mongoose'
 
-export interface Visit extends mongoose.Document {
-  visits: number
-}
-
-const visitSchema = new mongoose.Schema<Visit>(
+const VisitSchema = new Schema(
   {
     visits: {
       type: Number,
       default: 0,
+      min: 0,
     },
   },
-  { timestamps: true },
+  {
+    timestamps: true,
+    strict: true,
+    versionKey: false,
+  },
 )
 
-export default mongoose.models.Visit || mongoose.model<Visit>('Visit', visitSchema)
+export type VisitDoc = InferSchemaType<typeof VisitSchema> & { _id: Types.ObjectId }
+export const VisitModel: Model<VisitDoc> =
+  (models.Visit as Model<VisitDoc>) || model<VisitDoc>('Visit', VisitSchema)
+
+export default VisitModel
