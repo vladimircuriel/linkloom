@@ -75,7 +75,7 @@ async function TableItem({ url }: TableIconProps) {
       </td>
       <td className="px-4 py-2 text-center border-btn-gray-border">
         <Link
-          href={`/qr/${shortUrl}`}
+          href={`/${shortUrl}?qr=1`}
           target="_blank"
           rel="noopener noreferrer"
           className="transition hover:underline hover:text-main-blue-active"
