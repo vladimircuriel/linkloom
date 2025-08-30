@@ -11,3 +11,6 @@ export const ENCODED_JWT_SECRET = new TextEncoder().encode(JWT_SECRET)
 
 export const EXPIRATION_TIME = 60 * 60 * 24 // 1 day in seconds
 export const NODE_ENV = process.env.NODE_ENV
+export const HOSTNAME = process.env.NEXT_HOSTNAME
+export const URL_LENGTH = process.env.NEXT_URL_LENGTH ?? '6'
+export const URL_PREFIX = process.env.NEXT_URL_PREFIX
