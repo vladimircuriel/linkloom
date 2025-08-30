@@ -3,6 +3,7 @@ import Button from '@components/buttons/Button'
 import LoginIcon from '@components/icons/LoginIcon'
 import { logout } from '@lib/actions/auth.action'
 import Routes from '@lib/constants/routes.constants'
+import { headers } from 'next/headers'
 import Link from 'next/link'
 
 type NavbarProps = Readonly<{
@@ -10,7 +11,14 @@ type NavbarProps = Readonly<{
   adminPermissions: boolean
 }>
 
-export default function Navbar({ authenticated = false, adminPermissions = false }: NavbarProps) {
+export default async function Navbar({
+  authenticated = false,
+  adminPermissions = false,
+}: NavbarProps) {
+  const headersList = await headers()
+  const pathname = headersList.get('x-pathname')
+  const isOnShortener = pathname === Routes.SHORTENER
+
   return (
     <nav className="flex items-center justify-between px-4 py-3">
       <Link href={Routes.HOME}>
@@ -41,7 +49,7 @@ export default function Navbar({ authenticated = false, adminPermissions = false
             </Button>
           </Link>
         )}
-        {authenticated && (
+        {authenticated && !isOnShortener && (
           <Link href={Routes.SHORTENER}>
             <Button
               shadow
