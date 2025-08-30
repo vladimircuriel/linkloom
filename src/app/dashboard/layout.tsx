@@ -52,8 +52,7 @@ export default async function RootLayout({
             <DashboardSidebar user={user} pathname={pathname} />
           </div>
 
-          <div className="sticky top-0 flex flex-col p-5 flex-4">
-            <DashboardNavbar />
+          <div className="sticky top-0 flex flex-col p-5 pt-0 flex-4">
             <main>{children}</main>
           </div>
         </div>
