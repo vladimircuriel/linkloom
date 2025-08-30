@@ -14,7 +14,7 @@ export const connectToDatabase = async () => {
 
   const mongoURI = MONGO_DB_URI
   if (!mongoURI) {
-    throw new Error('MONGO environment variable is missing')
+    throw new Error('MONGO_DB_URI environment variable is missing')
   }
 
   try {
