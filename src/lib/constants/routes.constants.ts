@@ -5,6 +5,8 @@ const Routes = {
   LOGIN: '/login',
   SHORTENER: '/shortener',
   SETTINGS: '/settings',
+  USERS: '/users',
+  LOGOUT: '/logout',
 } as const
 
 export default Routes
