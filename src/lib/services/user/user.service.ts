@@ -55,7 +55,15 @@ export class UserService<
     return doc
   }
 
-  async getUsers(q: string, page: number, perPage = 5): Promise<QueryUsersResult<T>> {
+  async getUsers({
+    q,
+    page,
+    perPage = 5,
+  }: {
+    q: string
+    page: number
+    perPage: number
+  }): Promise<QueryUsersResult<T>> {
     await connectToDatabase()
 
     const regex = new RegExp(q, 'i')

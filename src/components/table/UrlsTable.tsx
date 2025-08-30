@@ -4,6 +4,7 @@ import InactiveLinkIcon from '@components/icons/InactiveLinkIcon'
 import QrIcon from '@components/icons/QrIcon'
 import { HOSTNAME } from '@lib/constants/config.constants'
 import type { UrlDoc } from '@lib/models/url/url.model'
+import formattedDate from '@lib/utils/date'
 import { getPreview } from '@lib/utils/preview'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -41,11 +42,6 @@ type TableIconProps = Readonly<{
 async function TableItem({ url }: TableIconProps) {
   const { shortUrl, originalUrl, clicks, status, createdAt } = url
   const preview = await getPreview({ urlToPreview: originalUrl })
-  const formattedDate = new Date(createdAt).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  })
 
   return (
     <tr className="bg-table-gray backdrop-blur-sm border-y-8 border-y-transparent">
@@ -97,7 +93,7 @@ async function TableItem({ url }: TableIconProps) {
         </td>
       )}
       <td className="hidden px-4 py-2 text-center lg:table-cell border-btn-gray-border">
-        {formattedDate}
+        {formattedDate(createdAt)}
       </td>
     </tr>
   )
