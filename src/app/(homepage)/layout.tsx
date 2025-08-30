@@ -5,6 +5,7 @@ import Background from '@components/background/Background'
 import Footer from '@components/navigation/footer/Footer'
 import Navbar from '@components/navigation/navbar/Navbar'
 import auth from '@lib/auth/auth'
+import { startup } from '@lib/bootstrap'
 
 const onest = Onest({
   subsets: ['latin'],
@@ -16,6 +17,8 @@ export const metadata: Metadata = {
   title: 'LinkLoom',
   description: 'LinkLoom is a URL shortener with QR integration, statistics in a modern UI.',
 }
+
+await startup()
 
 export default async function RootLayout({
   children,

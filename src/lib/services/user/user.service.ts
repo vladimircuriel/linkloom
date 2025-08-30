@@ -1,9 +1,11 @@
+import { ADMIN_EMAIL, ADMIN_PASSWORD } from '@lib/constants/config.constants'
 import {
   emailValidationSchema,
   idValidationSchema,
   userCreateSchema,
   userUpdateSchema,
 } from '@lib/models/user/user.schema'
+import authService from '@lib/services/auth/auth.service'
 import connectToDatabase from '@lib/utils/db'
 import to from '@lib/utils/to'
 import type { Model } from 'mongoose'
@@ -22,6 +24,36 @@ export class UserService<
   },
 > {
   constructor(private readonly User: Model<T>) {}
+
+  async ensureDefaultAdmin(opts?: {
+    email?: string
+    username?: string
+    name?: string
+    password?: string
+  }): Promise<T> {
+    const email = opts?.email ?? ADMIN_EMAIL
+    const username = opts?.username ?? 'admin'
+    const name = opts?.name ?? 'Administrator'
+    const rawPassword = opts?.password ?? ADMIN_PASSWORD
+
+    if (!email || !rawPassword) {
+      throw new Error('Missing ADMIN_EMAIL or ADMIN_PASSWORD')
+    }
+
+    const existing = await this.User.findOne({ email }).lean<T | null>()
+    if (existing) return existing as T
+
+    const hashed = await authService.hashPassword({ password: rawPassword })
+    const doc = await this.User.create({
+      email,
+      username,
+      name,
+      password: hashed,
+      isAdmin: true,
+    } as unknown as T)
+
+    return doc
+  }
 
   async getUsers(q: string, page: number, perPage = 5): Promise<QueryUsersResult<T>> {
     await connectToDatabase()

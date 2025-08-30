@@ -15,3 +15,5 @@ export const HOSTNAME = process.env.NEXT_HOSTNAME
 export const URL_LENGTH = process.env.NEXT_URL_LENGTH ?? '6'
 export const URL_PREFIX = process.env.NEXT_URL_PREFIX
 export const LINK_PREVIEW_API_KEY = process.env.NEXT_LINK_PREVIEW_API_KEY
+export const ADMIN_EMAIL = process.env.NEXT_ADMIN_EMAIL
+export const ADMIN_PASSWORD = process.env.NEXT_ADMIN_PASSWORD
