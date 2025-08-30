@@ -1,6 +1,9 @@
 import DashboardCard from '@components/card/DashboardCard'
-import { urlService } from '@/src/lib/services/url'
-import { userService } from '@/src/lib/services/user'
+import DashboardChart from '@components/chart/DashboardChart'
+import DashboardTransaction from '@components/table/DashboardTransactions'
+import { analyticsService } from '@lib/services/page'
+import { urlService } from '@lib/services/url'
+import { userService } from '@lib/services/user'
 
 export default async function DashboardPage() {
   const amountOfUsers = await userService.getAmountOfUsers()
@@ -9,6 +12,8 @@ export default async function DashboardPage() {
   const weeklyUrlGrowth = await urlService.getWeeklyUrlGrowth()
   const averageUrlsPerUser = await urlService.getAverageUrlsPerUser()
   const weeklyAverageUrlsPerUserGrowth = await urlService.getWeeklyAverageUrlsPerUserGrowth()
+  const last5Urls = await urlService.getLastNUrls(5)
+  const weeklyData = await analyticsService.getWeeklyData()
 
   return (
     <section className="flex mt-5 mb-5 gap-x-5">
@@ -26,8 +31,8 @@ export default async function DashboardPage() {
             percentage={weeklyAverageUrlsPerUserGrowth}
           />
         </div>
-        {/* <DashboardTransaction urls={last5Urls} /> */}
-        {/* <DashboardChart data={data} labels={{ label1: 'visits', label2: 'clicks' }} /> */}
+        <DashboardTransaction urls={last5Urls} />
+        <DashboardChart data={weeklyData} labels={{ label1: 'visits', label2: 'clicks' }} />
       </div>
     </section>
   )
