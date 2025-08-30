@@ -32,11 +32,7 @@ export default async function RootLayout({
         <Background />
 
         <header>
-          {/* <Navbar authenticated={userPayload.} adminPermissions={false} /> */}
-          {userPayload && (
-            <Navbar authenticated={userPayload && true} adminPermissions={userPayload.isAdmin} />
-          )}
-          {!userPayload && <Navbar authenticated={false} adminPermissions={false} />}
+          <Navbar authenticated={!!userPayload} adminPermissions={userPayload?.isAdmin ?? false} />
         </header>
         <main className="flex-1">{children}</main>
 
