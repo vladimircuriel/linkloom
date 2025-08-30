@@ -42,16 +42,6 @@ const NAVIGATION = [
       },
     ],
   },
-  {
-    title: 'User',
-    list: [
-      {
-        label: 'Profile',
-        href: `${Routes.DASHBOARD}/user/profile`,
-        icon: <UserProfileIcon />,
-      },
-    ],
-  },
 ]
 
 export default NAVIGATION

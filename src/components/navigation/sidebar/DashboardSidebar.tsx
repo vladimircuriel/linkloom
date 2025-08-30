@@ -39,7 +39,7 @@ export default function DashboardSidebar({ user }: DashboardSidebarProps) {
             </li>
           ))}
         </ul>
-        <div className="flex flex-col gap-y-2">
+        <div className="flex flex-col gap-y-2 mt-64">
           <Link
             href={Routes.SHORTENER}
             className="flex items-center w-full p-3 transition rounded-lg gap-x-3 hover:bg-main-blue/50"
