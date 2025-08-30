@@ -1,8 +1,7 @@
 import Heading from '@components/headings/Heading'
-import User from '@components/user/User'
 import type { UrlDoc } from '@lib/models/url/url.model'
-import { userService } from '@lib/services/user'
 import formattedDate from '@lib/utils/date'
+import UserTable from '@lib/utils/user'
 import Link from 'next/link'
 
 type DashboardTransactionProperties = Readonly<{
@@ -10,14 +9,6 @@ type DashboardTransactionProperties = Readonly<{
 }>
 
 export default function DashboardTransaction({ urls }: DashboardTransactionProperties) {
-  const UserTable = async ({ userId }: { userId: string }) => {
-    const user = await userService.getUserById(userId)
-    if (!user) {
-      return <span className="text-gray-400">Unknown User</span>
-    }
-    return <User user={user} />
-  }
-
   return (
     <section className="flex flex-col p-5 rounded-lg gap-y-5 bg-main-gray">
       <Heading>Latest Urls</Heading>

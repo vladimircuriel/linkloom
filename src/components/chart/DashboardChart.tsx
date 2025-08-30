@@ -14,12 +14,21 @@ type DashboardChartProperties = Readonly<{
     label1: string
     label2?: string
   }
+
+  height?: string
+
+  title?: string
 }>
 
-export default function DashboardChart({ data, labels }: DashboardChartProperties) {
+export default function DashboardChart({
+  data,
+  labels,
+  height = 'h-96',
+  title = 'Dashboard Chart',
+}: DashboardChartProperties) {
   return (
-    <section className="flex flex-col p-5 rounded-lg gap-y-5 h-96 bg-main-gray">
-      <Heading>Dashboard Chart</Heading>
+    <section className={`flex flex-col p-5 rounded-lg gap-y-5 ${height} bg-main-gray`}>
+      <Heading>{title}</Heading>
       <ResponsiveContainer width="100%" height="90%">
         <LineChart
           width={500}

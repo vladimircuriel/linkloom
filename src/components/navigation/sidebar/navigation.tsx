@@ -4,6 +4,7 @@ import UrlsIcon from '@components/icons/UrlsIcon'
 import UserAnalyticsIcon from '@components/icons/UserAnalyticsIcon'
 import UserProfileIcon from '@components/icons/UserProfileIcon'
 import UsersIcon from '@components/icons/UsersIcon'
+import Routes from '@lib/constants/routes.constants'
 
 const NAVIGATION = [
   {
@@ -11,17 +12,17 @@ const NAVIGATION = [
     list: [
       {
         label: 'Dashboard',
-        href: '/dashboard',
+        href: `${Routes.DASHBOARD}`,
         icon: <DashboardIcon />,
       },
       {
         label: 'Users',
-        href: '/dashboard/users',
+        href: `${Routes.DASHBOARD}/users`,
         icon: <UsersIcon />,
       },
       {
         label: 'Urls',
-        href: '/dashboard/urls',
+        href: `${Routes.DASHBOARD}/urls`,
         icon: <UrlsIcon />,
       },
     ],
@@ -31,12 +32,12 @@ const NAVIGATION = [
     list: [
       {
         label: 'Users',
-        href: '/dashboard/analytics/users',
+        href: `${Routes.DASHBOARD}/analytics/users`,
         icon: <UserAnalyticsIcon />,
       },
       {
         label: 'Urls',
-        href: '/dashboard/analytics/urls',
+        href: `${Routes.DASHBOARD}/analytics/urls`,
         icon: <UrlsAnalyticsIcon />,
       },
     ],
@@ -46,7 +47,7 @@ const NAVIGATION = [
     list: [
       {
         label: 'Profile',
-        href: '/dashboard/user/profile',
+        href: `${Routes.DASHBOARD}/user/profile`,
         icon: <UserProfileIcon />,
       },
     ],

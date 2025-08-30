@@ -1,17 +1,21 @@
+'use client'
+
 import LogoutButton from '@components/buttons/LogoutButton'
 import HomeIcon from '@components/icons/HomeIcon'
 import User from '@components/user/User'
 import Routes from '@lib/constants/routes.constants'
 import type { UserDoc } from '@lib/models/user/user.model'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import NAVIGATION from './navigation'
 
 type DashboardSidebarProps = Readonly<{
   user: UserDoc
-  pathname: string | null
 }>
 
-export default async function DashboardSidebar({ user, pathname }: DashboardSidebarProps) {
+export default function DashboardSidebar({ user }: DashboardSidebarProps) {
+  const pathname = usePathname()
+
   return (
     <aside className="w-full pt-5 bg-background-gray rounded-2xl">
       <nav className="flex flex-col mx-6 gap-y-5">
@@ -37,11 +41,11 @@ export default async function DashboardSidebar({ user, pathname }: DashboardSide
         </ul>
         <div className="flex flex-col gap-y-2">
           <Link
-            href={Routes.HOME}
+            href={Routes.SHORTENER}
             className="flex items-center w-full p-3 transition rounded-lg gap-x-3 hover:bg-main-blue/50"
           >
             <HomeIcon />
-            Home
+            Shortener
           </Link>
           <LogoutButton />
         </div>

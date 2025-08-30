@@ -16,7 +16,15 @@ export class UrlService<
 > {
   constructor(private readonly Url: Model<T>) {}
 
-  async getUrls(q: string, page: number, perPage = 5): Promise<QueryUrlsResult<T>> {
+  async getUrls({
+    q,
+    page,
+    perPage = 5,
+  }: {
+    q: string
+    page: number
+    perPage: number
+  }): Promise<QueryUrlsResult<T>> {
     await connectToDatabase()
     const regex = new RegExp(q, 'i')
 
