@@ -1,48 +1,28 @@
 'use server'
 
-import auth from '@lib/auth/auth'
 import Routes from '@lib/constants/routes.constants'
-import { emailValidationSchema } from '@lib/models/user/user.schema'
 import authService from '@lib/services/auth/auth.service'
-import { userService } from '@lib/services/user/index'
+import { userService } from '@lib/services/user'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
 
-export const login = async (_prev: unknown, formData: FormData) => {
-  const rawEmail = String(formData.get('email') ?? '')
-  const password = String(formData.get('password') ?? '')
+const schema = z.object({
+  userId: z.string().regex(/^[a-f\d]{24}$/i, 'Invalid id'),
+})
 
-  const parsed = emailValidationSchema.safeParse({ email: rawEmail })
-  if (!parsed.success || !password) return { error: 'Email and password are required' }
-  const email = parsed.data.email
+export const deleteUser = async (_prev: unknown, formData: FormData) => {
+  const parsed = schema.safeParse({ userId: String(formData.get('userId') ?? '') })
+  if (!parsed.success) return { error: 'Invalid data' }
 
   try {
-    const user = await userService.getUserByEmail(email)
-    if (!user || !user.password) return { error: 'Invalid credentials' }
-
-    const ok = await authService.comparePassword({
-      password,
-      hashedPassword: user.password,
-    })
-    if (!ok) return { error: 'Invalid credentials' }
-
-    await auth.createSession({
-      sub: String(user._id),
-      id: user._id,
-      email: user.email,
-      isAdmin: user.isAdmin,
-    })
-  } catch (error) {
-    throw new Error(`An error occurred during login: ${error}`)
+    const deleted = await userService.deleteUser(parsed.data.userId)
+    if (!deleted) return { error: 'User not found' }
+    revalidatePath(`${Routes.DASHBOARD}/users`)
+    return { success: true }
+  } catch (err) {
+    throw new Error(`Delete user failed: ${err}`)
   }
-  redirect(Routes.SHORTENER)
-}
-
-export const logout = async () => {
-  await auth.deleteSession()
-  revalidatePath('/')
-  redirect(Routes.HOME)
 }
 
 const formSchema = z
@@ -57,7 +37,7 @@ const formSchema = z
     path: ['confirmPassword'],
   })
 
-export const register = async (_prev: unknown, formData: FormData) => {
+export const createUser = async (_prev: unknown, formData: FormData) => {
   const raw = {
     name: String(formData.get('name') ?? ''),
     email: String(formData.get('email') ?? ''),
@@ -86,14 +66,33 @@ export const register = async (_prev: unknown, formData: FormData) => {
 
     const user = await userService.getUserByEmail(email)
     if (!user) throw new Error('User creation failed')
-    await auth.createSession({
-      sub: String(user._id),
-      id: user._id,
-      email: user.email,
-      isAdmin: user.isAdmin,
-    })
   } catch (err) {
     throw new Error(`Registration failed: ${err}`)
   }
-  redirect(Routes.SHORTENER)
+
+  redirect(`${Routes.DASHBOARD}/users`)
+}
+
+const editFormSchema = z.object({
+  userId: z.string().regex(/^[a-f\d]{24}$/i, 'Invalid id'),
+  name: z.string().min(1).optional(),
+  email: z.email().optional(),
+  username: z.string().min(1).optional(),
+  isAdmin: z.coerce.boolean().optional(),
+})
+
+export const editUser = async (_prev: unknown, formData: FormData) => {
+  const raw = Object.fromEntries(formData.entries())
+  const parsed = editFormSchema.safeParse(raw)
+  if (!parsed.success) return { error: 'Invalid data' }
+
+  try {
+    const { userId, ...rest } = parsed.data
+    const updated = await userService.updateUser(userId, rest)
+    if (!updated) return { error: 'User not found' }
+  } catch (err) {
+    throw new Error(`Update user failed: ${err}`)
+  }
+
+  redirect(`${Routes.DASHBOARD}/users`)
 }

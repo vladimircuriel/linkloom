@@ -2,12 +2,11 @@
 
 import Button from '@components/buttons/Button'
 import Input from '@components/inputs/Input'
-import { useRegisterForm } from '@lib/hooks/useRegisterForm'
-import Link from 'next/link'
+import { useCreateUserForm } from '@lib/hooks/useCreateUserForm'
 
-export default function RegisterForm() {
+export default function CreateUserForm() {
   const { state, formAction, isPending, isErrorVisible, handleInputChange, handleClick } =
-    useRegisterForm()
+    useCreateUserForm()
 
   return (
     <form action={formAction} className="flex flex-col items-center justify-center gap-y-5">
@@ -17,6 +16,7 @@ export default function RegisterForm() {
           type="text"
           name="name"
           placeholder="Name"
+          className="!w-[550px]"
           required
           shadow
           onChange={handleInputChange}
@@ -28,6 +28,7 @@ export default function RegisterForm() {
           type="email"
           name="email"
           placeholder="Email"
+          className="!w-[550px]"
           required
           shadow
           onChange={handleInputChange}
@@ -39,6 +40,7 @@ export default function RegisterForm() {
           type="password"
           name="password"
           placeholder="Password"
+          className="!w-[550px]"
           required
           shadow
           onChange={handleInputChange}
@@ -50,6 +52,7 @@ export default function RegisterForm() {
           type="password"
           name="confirmPassword"
           placeholder="Confirm password"
+          className="!w-[550px]"
           required
           shadow
           onChange={handleInputChange}
@@ -64,14 +67,8 @@ export default function RegisterForm() {
         onClick={handleClick}
         disabled={isPending}
       >
-        Create your account now
+        Create User
       </Button>
-
-      <Link href="/login">
-        <p className="text-main-blue hover:text-main-blue-active">
-          Have an account? <strong>Log in</strong>
-        </p>
-      </Link>
     </form>
   )
 }

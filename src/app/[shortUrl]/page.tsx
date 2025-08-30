@@ -30,6 +30,10 @@ export default async function ShortUrlPage({
     await urlService.updateUrl(url._id.toString(), { clicks: url.clicks + 1 })
   }
 
+  if (!url || !url.status) {
+    return redirect(Routes.SHORTENER)
+  }
+
   if (qr) {
     return (
       <html lang="en">
@@ -53,10 +57,6 @@ export default async function ShortUrlPage({
         </body>
       </html>
     )
-  }
-
-  if (!url) {
-    return redirect(Routes.SHORTENER)
   }
 
   return redirect(url.originalUrl)

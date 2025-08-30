@@ -1,16 +1,19 @@
 'use client'
 
 import CopyIcon from '@components/icons/CopyIcon'
+import toast from 'react-hot-toast'
 
 type CopyButtonProperties = {
   text: string
 }
 
-const CopyButton = ({ text }: CopyButtonProperties) => {
+export default function CopyButton({ text }: CopyButtonProperties) {
   const handleCopy = (textToCopy: string) => {
     navigator.clipboard.writeText(textToCopy).catch((error) => {
       throw new Error(`Failed to copy text: ${error}`)
     })
+
+    toast.success('Copied to clipboard!')
   }
 
   return (
@@ -19,5 +22,3 @@ const CopyButton = ({ text }: CopyButtonProperties) => {
     </button>
   )
 }
-
-export default CopyButton
