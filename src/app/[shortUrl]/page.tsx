@@ -1,4 +1,5 @@
 import Routes from '@lib/constants/routes.constants'
+import { analyticsService } from '@lib/services/page'
 import { urlService } from '@lib/services/url'
 import { redirect } from 'next/navigation'
 
@@ -11,7 +12,13 @@ export default async function ShortUrlPage({ params }: { params: Promise<{ short
     return null
   }
 
+  analyticsService.incrementPageClicks()
+
   const url = await urlService.getUrlByShortUrl(shortUrl)
+
+  if (url) {
+    await urlService.updateUrl(url._id.toString(), { clicks: url.clicks + 1 })
+  }
   if (!url) {
     return redirect(Routes.SHORTENER)
   }
