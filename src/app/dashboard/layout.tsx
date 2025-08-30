@@ -37,8 +37,7 @@ export default async function RootLayout({
   const user = userPayload ? await userService.getUserById(userPayload.sub) : null
   if (!user) redirect(Routes.HOME)
 
-  const headersList = await headers()
-  const pathname = headersList.get('x-pathname')
+  const plainUser = JSON.parse(JSON.stringify(user))
 
   return (
     <html lang="en">
@@ -49,7 +48,7 @@ export default async function RootLayout({
 
         <div className="flex items-start justify-center py-4">
           <div className="sticky top-0 flex flex-1 min-h-screen">
-            <DashboardSidebar user={user} pathname={pathname} />
+            <DashboardSidebar user={plainUser} />
           </div>
 
           <div className="sticky top-0 flex flex-col p-5 pt-0 flex-4">

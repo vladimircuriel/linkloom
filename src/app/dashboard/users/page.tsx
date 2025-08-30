@@ -17,13 +17,13 @@ export default async function DashboardUsersPage({
   searchParams: { [key: string]: string | string[] | undefined }
 }) {
   const resolvedSearchParams = await searchParams
-  const q = resolvedSearchParams.qr
+  const q = resolvedSearchParams.q
   const page = resolvedSearchParams.page ? Number(resolvedSearchParams.page) : 1
 
   const { usersAmount, users } = await userService.getUsers({
     q: typeof q === 'string' ? q : '',
     page: page || 1,
-    perPage: 5,
+    perPage: 7,
   })
 
   const userPayload = await auth.getAuthPayload()

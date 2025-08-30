@@ -1,6 +1,7 @@
 import EditUserForm from '@components/forms/EditUserForm'
 import { userService } from '@lib/services/user'
 import Image from 'next/image'
+import { Toaster } from 'react-hot-toast'
 
 export default async function DashboardUserPage({
   params,
@@ -25,6 +26,7 @@ export default async function DashboardUserPage({
 
   return (
     <section className="flex flex-row items-center w-full p-2 shadow-xl sm:p-14 md:p-20 rounded-3xl bg-background-gray">
+      <Toaster />
       <div className="flex flex-col items-center justify-center flex-2 gap-y-6">
         <h3 className="text-4xl font-extrabold">{user.name}</h3>
         <Image

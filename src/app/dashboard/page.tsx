@@ -16,7 +16,7 @@ export default async function DashboardPage() {
   const weeklyData = await analyticsService.getWeeklyData()
 
   return (
-    <section className="flex mt-5 mb-5 gap-x-5">
+    <section className="flex gap-x-5">
       <div className="flex flex-col flex-3 gap-y-5">
         <div className="flex justify-between gap-x-5">
           <DashboardCard
@@ -32,7 +32,12 @@ export default async function DashboardPage() {
           />
         </div>
         <DashboardTransaction urls={last5Urls} />
-        <DashboardChart data={weeklyData} labels={{ label1: 'visits', label2: 'clicks' }} />
+        <DashboardChart
+          title="Website Visits This Week"
+          data={weeklyData}
+          height="h-[630px]"
+          labels={{ label1: 'visits', label2: 'clicks' }}
+        />
       </div>
     </section>
   )
