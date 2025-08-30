@@ -4,6 +4,7 @@ import '../globals.css'
 import Background from '@components/background/Background'
 import Footer from '@components/navigation/footer/Footer'
 import Navbar from '@components/navigation/navbar/Navbar'
+import auth from '@lib/auth/auth'
 
 const onest = Onest({
   subsets: ['latin'],
@@ -16,11 +17,13 @@ export const metadata: Metadata = {
   description: 'LinkLoom is a URL shortener with QR integration, statistics in a modern UI.',
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const userPayload = await auth.getAuthPayload()
+
   return (
     <html lang="en">
       <body
@@ -29,7 +32,11 @@ export default function RootLayout({
         <Background />
 
         <header>
-          <Navbar authenticated={false} adminPermissions={false} />
+          {/* <Navbar authenticated={userPayload.} adminPermissions={false} /> */}
+          {userPayload && (
+            <Navbar authenticated={userPayload && true} adminPermissions={userPayload.isAdmin} />
+          )}
+          {!userPayload && <Navbar authenticated={false} adminPermissions={false} />}
         </header>
         <main className="flex-1">{children}</main>
 

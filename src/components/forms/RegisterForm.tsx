@@ -3,10 +3,14 @@
 import Button from '@components/buttons/Button'
 import Input from '@components/inputs/Input'
 import Link from 'next/link'
+import { useRegisterForm } from '@/src/lib/hooks/useRegisterForm'
 
 export default function RegisterForm() {
+  const { state, formAction, isPending, isErrorVisible, handleInputChange, handleClick } =
+    useRegisterForm()
+
   return (
-    <form className="flex flex-col items-center justify-center gap-y-5">
+    <form action={formAction} className="flex flex-col items-center justify-center gap-y-5">
       <label htmlFor="name">
         <Input
           id="name"
@@ -15,7 +19,7 @@ export default function RegisterForm() {
           placeholder="Name"
           required
           shadow
-          // onChange={handleInputChange}
+          onChange={handleInputChange}
         />
       </label>
       <label htmlFor="email">
@@ -26,7 +30,7 @@ export default function RegisterForm() {
           placeholder="Email"
           required
           shadow
-          // onChange={handleInputChange}
+          onChange={handleInputChange}
         />
       </label>
       <label htmlFor="password">
@@ -37,7 +41,7 @@ export default function RegisterForm() {
           placeholder="Password"
           required
           shadow
-          // onChange={handleInputChange}
+          onChange={handleInputChange}
         />
       </label>
       <label htmlFor="confirm-password">
@@ -48,17 +52,20 @@ export default function RegisterForm() {
           placeholder="Confirm password"
           required
           shadow
-          // onChange={handleInputChange}
+          onChange={handleInputChange}
         />
       </label>
+
+      {isErrorVisible && state?.error && <p className="text-red-500">{state.error}</p>}
+
       <Button
         className="bg-main-blue border-main-blue active:bg-main-blue-active"
         shadow
-        // onClick={handleClick}
+        onClick={handleClick}
+        disabled={isPending}
       >
         Create your account now
       </Button>
-      {/* {isErrorVisible && state?.error && <p className="text-red-500">{state.error}</p>} */}
 
       <Link href="/login">
         <p className="text-main-blue hover:text-main-blue-active">

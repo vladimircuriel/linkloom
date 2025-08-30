@@ -3,7 +3,7 @@ import Button from '@components/buttons/Button'
 import Routes from '@lib/constants/routes.constants'
 import Link from 'next/link'
 
-export default function HomePage() {
+export default async function HomePage() {
   return (
     <section className="py-8">
       <div className="flex flex-col items-center justify-center lg:flex-row">

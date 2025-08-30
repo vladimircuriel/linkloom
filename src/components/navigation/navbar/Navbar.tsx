@@ -1,6 +1,7 @@
 import Logo from '@components/brand/logo/Logo'
 import Button from '@components/buttons/Button'
 import LoginIcon from '@components/icons/LoginIcon'
+import { logout } from '@lib/actions/auth.action'
 import Routes from '@lib/constants/routes.constants'
 import Link from 'next/link'
 
@@ -51,7 +52,7 @@ export default function Navbar({ authenticated = false, adminPermissions = false
           </Link>
         )}
         {authenticated && (
-          <form>
+          <form action={logout}>
             <Button className="bg-main-gray border-main-gray-border active:bg-main-gray-border">
               Logout
             </Button>

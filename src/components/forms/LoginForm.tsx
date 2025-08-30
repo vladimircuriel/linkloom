@@ -2,14 +2,15 @@
 
 import Button from '@components/buttons/Button'
 import Input from '@components/inputs/Input'
+import { useLoginForm } from '@lib/hooks/useLoginForm'
 import Link from 'next/link'
 
 export default function LoginForm() {
-  // const { formAction, state, error, handleInputChange, handleClick } =
-  //   useLoginForm();
+  const { state, formAction, isPending, isErrorVisible, handleInputChange, handleClick } =
+    useLoginForm()
 
   return (
-    <form className="flex flex-col items-center justify-center gap-y-5">
+    <form action={formAction} className="flex flex-col items-center justify-center gap-y-5">
       <label htmlFor="email">
         <Input
           id="email"
@@ -18,7 +19,7 @@ export default function LoginForm() {
           placeholder="Email"
           shadow
           required
-          // onChange={handleInputChange}
+          onChange={handleInputChange}
         />
       </label>
       <label htmlFor="password">
@@ -29,14 +30,17 @@ export default function LoginForm() {
           placeholder="Password"
           shadow
           required
-          // onChange={handleInputChange}
+          onChange={handleInputChange}
         />
       </label>
+
+      {isErrorVisible && state?.error && <p className="text-red-500">{state.error}</p>}
 
       <Button
         className="bg-main-blue border-main-blue active:bg-main-blue-active"
         shadow
-        // onClick={handleClick}
+        onClick={handleClick}
+        disabled={isPending}
       >
         Login into your account
       </Button>
@@ -45,7 +49,6 @@ export default function LoginForm() {
           {"Don't have an account?"} <strong>Register</strong>
         </p>
       </Link>
-      {/* {isErrorVisible && state?.error && <p className="text-red-500">{state.error}</p>} */}
     </form>
   )
 }
