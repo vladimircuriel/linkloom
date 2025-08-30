@@ -8,9 +8,15 @@ importers:
 
   .:
     dependencies:
+      bcryptjs:
+        specifier: ^3.0.2
+        version: 3.0.2
       framer-motion:
-        specifier: ^12.23.12
+        specifier: 12.23.12
         version: 12.23.12(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      jose:
+        specifier: ^6.1.0
+        version: 6.1.0
       mongoose:
         specifier: 8.18.0
         version: 8.18.0
@@ -23,6 +29,9 @@ importers:
       react-dom:
         specifier: 19.1.0
         version: 19.1.0(react@19.1.0)
+      zod:
+        specifier: ^4.1.5
+        version: 4.1.5
     devDependencies:
       '@biomejs/biome':
         specifier: 2.2.2
@@ -412,6 +421,10 @@ packages:
   '@types/whatwg-url@11.0.5':
     resolution: {integrity: sha512-coYR071JRaHa+xoEvvYqvnIHaVqaYrLPbsufM9BF63HkwI5Lgmy2QR8Q5K/lYDYo5AK82wOvSOS0UsLTpTG7uQ==}
 
+  bcryptjs@3.0.2:
+    resolution: {integrity: sha512-k38b3XOZKv60C4E2hVsXTolJWfkGRMbILBIe2IBITXciy5bOsTKot5kDrf3ZfufQtQOUN5mXceUEpU1rTl9Uog==}
+    hasBin: true
+
   bson@6.10.4:
     resolution: {integrity: sha512-WIsKqkSC0ABoBJuT1LEX+2HEvNmNKKgnTAyd0fL8qzK4SH2i9NXg+t08YtdZp/V9IZ33cxe3iV4yM0qg8lMQng==}
     engines: {node: '>=16.20.1'}
@@ -483,6 +496,9 @@ packages:
   jiti@2.5.1:
     resolution: {integrity: sha512-twQoecYPiVA5K/h6SxtORw/Bs3ar+mLUtoPSc7iMXzQzK8d7eJ/R09wmTwAjiamETn1cXYPGfNnu7DMoHgu12w==}
     hasBin: true
+
+  jose@6.1.0:
+    resolution: {integrity: sha512-TTQJyoEoKcC1lscpVDCSsVgYzUDg/0Bt3WE//WiTPK6uOCQC2KZS4MpugbMWt/zyjkopgZoXhZuCi00gLudfUA==}
 
   kareem@2.6.3:
     resolution: {integrity: sha512-C3iHfuGUXK2u8/ipq9LfjFfXFxAZMQJJq7vLS45r3D9Y2xQ/m4S8zaR4zMLFWh9AsNPXmcFfUDhTEO8UIC/V6Q==}
@@ -747,6 +763,9 @@ packages:
   yallist@5.0.0:
     resolution: {integrity: sha512-YgvUTfwqyc7UXVMrB+SImsVYSmTS8X/tSrtdNZMImM+n7+QTriRXyXim0mBrTXNeqzVF0KWGgHPeiyViFFrNDw==}
     engines: {node: '>=18'}
+
+  zod@4.1.5:
+    resolution: {integrity: sha512-rcUUZqlLJgBC33IT3PNMgsCq6TzLQEG/Ei/KTCU0PedSWRMAXoOUN+4t/0H+Q8bdnLPdqUYnvboJT0bn/229qg==}
 
 snapshots:
 
@@ -1025,6 +1044,8 @@ snapshots:
     dependencies:
       '@types/webidl-conversions': 7.0.3
 
+  bcryptjs@3.0.2: {}
+
   bson@6.10.4: {}
 
   caniuse-lite@1.0.30001737: {}
@@ -1081,6 +1102,8 @@ snapshots:
     optional: true
 
   jiti@2.5.1: {}
+
+  jose@6.1.0: {}
 
   kareem@2.6.3: {}
 
@@ -1321,3 +1344,5 @@ snapshots:
       webidl-conversions: 7.0.0
 
   yallist@5.0.0: {}
+
+  zod@4.1.5: {}
