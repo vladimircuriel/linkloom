@@ -18,7 +18,8 @@ export default function User({ user }: UserProperties) {
 
       <div className="flex flex-col items-start justify-center">
         <span className="">{user.name}</span>
-        <span className="text-xs text-main-dark-white">Administrator</span>
+        {user.isAdmin && <span className="text-xs text-main-dark-white">Administrator</span>}
+        {!user.isAdmin && <span className="text-xs text-main-dark-white">User</span>}
       </div>
     </div>
   )

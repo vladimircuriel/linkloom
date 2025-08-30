@@ -72,3 +72,27 @@ export const createUser = async (_prev: unknown, formData: FormData) => {
 
   redirect(`${Routes.DASHBOARD}/users`)
 }
+
+const editFormSchema = z.object({
+  userId: z.string().regex(/^[a-f\d]{24}$/i, 'Invalid id'),
+  name: z.string().min(1).optional(),
+  email: z.email().optional(),
+  username: z.string().min(1).optional(),
+  isAdmin: z.coerce.boolean().optional(),
+})
+
+export const editUser = async (_prev: unknown, formData: FormData) => {
+  const raw = Object.fromEntries(formData.entries())
+  const parsed = editFormSchema.safeParse(raw)
+  if (!parsed.success) return { error: 'Invalid data' }
+
+  try {
+    const { userId, ...rest } = parsed.data
+    const updated = await userService.updateUser(userId, rest)
+    if (!updated) return { error: 'User not found' }
+  } catch (err) {
+    throw new Error(`Update user failed: ${err}`)
+  }
+
+  redirect(`${Routes.DASHBOARD}/users`)
+}

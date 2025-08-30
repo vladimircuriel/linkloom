@@ -83,7 +83,7 @@ export default async function DashboardUsersPage({
                         View
                       </Button>
                     </Link>
-                    {(user._id.toString() !== userPayload.sub || !user.isAdmin) && (
+                    {user._id.toString() !== userPayload.sub && !user.isAdmin && (
                       <DeleteUserForm userId={user._id.toString()} />
                     )}
                   </div>
