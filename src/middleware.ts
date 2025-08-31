@@ -4,14 +4,20 @@ import auth from '@lib/auth/auth'
 import Routes from '@lib/constants/routes.constants'
 import { type NextRequest, NextResponse } from 'next/server'
 
-export default async function middleware(request: NextRequest) {
-  const path = request.nextUrl.pathname
+export const config = {
+  matcher: ['/((?!api|_next/static|_next/image|.*\\.png$).*)'],
+  runtime: 'nodejs',
+}
 
-  // lee token desde la cookie del request
+export default async function middleware(request: NextRequest) {
+  const start = Date.now()
+  const requestId = crypto.randomUUID()
+  const url = request.nextUrl
+  const path = url.pathname
+
   const token = request.cookies.get('session')?.value
   const payload = token ? await auth.verifyToken(token) : null
 
-  // normaliza "usuario"
   const user = payload
     ? {
         id: String(payload.sub ?? ''),
@@ -21,36 +27,65 @@ export default async function middleware(request: NextRequest) {
     : null
 
   const isOnDashboard = path.startsWith(Routes.DASHBOARD)
-  const isOnUsers = path.startsWith(Routes.USERS)
   const isOnLogin = path.startsWith(Routes.LOGIN)
   const isOnRegister = path.startsWith(Routes.REGISTER)
   const isOnShortener = path.startsWith(Routes.SHORTENER)
-  const isOnSettings = path.startsWith(Routes.SETTINGS)
 
-  if ((isOnDashboard || isOnUsers) && !user?.isAdmin) {
-    return NextResponse.redirect(new URL(Routes.LOGIN, request.nextUrl))
+  if (isOnDashboard && !user?.isAdmin) {
+    globalThis.logger?.warn({
+      meta: {
+        requestId,
+        duration: `${Date.now() - start}ms`,
+        path,
+        user: user?.id ?? 'anon',
+      },
+      message: 'Access denied to Dashboard',
+    })
+    return NextResponse.redirect(new URL(Routes.LOGIN, url))
   }
 
   if ((isOnLogin || isOnRegister) && user) {
-    return NextResponse.redirect(new URL(Routes.HOME, request.nextUrl))
+    globalThis.logger?.info({
+      meta: {
+        requestId,
+        duration: `${Date.now() - start}ms`,
+        path,
+        user: user.id,
+      },
+      message: 'Authenticated user trying to access auth pages',
+    })
+    return NextResponse.redirect(new URL(Routes.HOME, url))
   }
 
-  if ((isOnShortener || isOnSettings) && !user) {
-    return NextResponse.redirect(new URL(Routes.HOME, request.nextUrl))
+  if (isOnShortener && !user) {
+    globalThis.logger?.warn({
+      meta: {
+        requestId,
+        duration: `${Date.now() - start}ms`,
+        path,
+      },
+      message: 'Unauthenticated user trying to access shortener',
+    })
+    return NextResponse.redirect(new URL(Routes.LOGIN, url))
   }
 
   const requestHeaders = new Headers(request.headers)
-  requestHeaders.set('x-pathname', request.nextUrl.pathname)
+  requestHeaders.set('x-pathname', path)
 
   const response = NextResponse.next({
-    request: {
-      headers: requestHeaders,
+    request: { headers: requestHeaders },
+  })
+
+  globalThis.logger?.info({
+    meta: {
+      requestId,
+      duration: `${Date.now() - start}ms`,
+      method: request.method,
+      path,
+      user: user?.id ?? 'anon',
     },
+    message: 'Middleware processed request',
   })
 
   return response
-}
-
-export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|.*\\.png$).*)'],
 }

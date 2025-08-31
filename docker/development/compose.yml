@@ -1,18 +1,83 @@
 services:
+  grafana:
+    container_name: dev-linkloom-grafana
+    image: grafana/grafana:latest
+    restart: unless-stopped
+    ports:
+      - "3001:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: dev-admin
+      GF_SECURITY_ADMIN_PASSWORD: dev-admin123
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ../../grafana/provisioning:/etc/grafana/provisioning
+    depends_on:
+      loki:
+        condition: service_healthy
+      prometheus:
+        condition: service_healthy
+
+  loki:
+    container_name: dev-linkloom-loki
+    image: grafana/loki:2.9.2
+    restart: unless-stopped
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    volumes:
+      - ../../loki/development/loki-config.yaml/:/etc/loki/local-config.yaml
+    healthcheck:
+      test: wget --quiet --tries=1 --output-document=- http://localhost:3100/ready | grep -q -w ready || exit 1
+      start_period: 20s
+      interval: 10s
+      timeout: 1s
+      retries: 12
+
+  prometheus:
+    container_name: dev-linkloom-prometheus
+    image: prom/prometheus:latest
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ../../prometheus/development/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "--quiet", "--tries=1", "--timeout=5", "http://localhost:9090/-/ready"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 60s
+    depends_on:
+      loki:
+        condition: service_healthy
+      mongo-prometheus:
+        condition: service_started
+
   frontend:
     container_name: dev-linkloom-frontend
     build:
       context: ../../
       dockerfile: docker/development/Dockerfile
+    restart: unless-stopped
     ports:
       - "3000:3000"
     depends_on:
       db:
         condition: service_healthy
+      loki:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
 
   db:
     image: mongo:8.0
     container_name: dev-linkloom-db
+    restart: unless-stopped
     ports:
       - "27017:27017"
     volumes:
@@ -22,7 +87,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: dev-password
       MONGO_INITDB_DATABASE: dev-linkloom-db
     healthcheck:
-      test: ["CMD", "mongo", "--eval", "db.runCommand({ ping: 1 })"]
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
       interval: 10s
       timeout: 5s
       retries: 5
@@ -31,9 +96,13 @@ services:
   db-studio:
     image: mongo-express:1.0.0
     container_name: dev-linkloom-db-studio
+    restart: unless-stopped
     ports:
       - "8081:8081"
     environment:
+      ME_CONFIG_BASICAUTH: true
+      ME_CONFIG_BASICAUTH_USERNAME: dev-admin
+      ME_CONFIG_BASICAUTH_PASSWORD: dev-password
       ME_CONFIG_MONGODB_ADMINUSERNAME: dev-admin
       ME_CONFIG_MONGODB_ADMINPASSWORD: dev-password
       ME_CONFIG_MONGODB_SERVER: db
@@ -43,5 +112,26 @@ services:
       db:
         condition: service_healthy
 
+  mongo-prometheus:
+    container_name: dev-linkloom-mongo-exporter
+    image: bitnami/mongodb-exporter:0.47.0
+    restart: unless-stopped
+    environment:
+      MONGODB_URI: mongodb://dev-admin:dev-password@db:27017/admin
+    command:
+      - --web.listen-address=:9216
+      - --collector.dbstats
+      - --collector.replicasetstatus
+      - --collector.diagnosticdata
+      - --collector.fcv
+      - --no-collector.exporter-metrics
+    ports:
+      - "9216:9216"
+    depends_on:
+      db:
+        condition: service_healthy
+
 volumes:
   mongo-data: {}
+  grafana-data: {}
+  prometheus-data: {}
