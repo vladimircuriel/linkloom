@@ -9,7 +9,6 @@ import pino from 'pino'
 import pinoLoki from 'pino-loki'
 import { collectDefaultMetrics, Registry } from 'prom-client'
 
-
 declare global {
   var logger: Logger | undefined
 
