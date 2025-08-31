@@ -9,12 +9,13 @@ import { userService } from '@lib/services/user'
 import formattedDate from '@lib/utils/date'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
+import { Toaster } from 'react-hot-toast'
 import auth from '@/src/lib/auth/auth'
 
 export default async function DashboardUsersPage({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | string[] | undefined }
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
   const resolvedSearchParams = await searchParams
   const q = resolvedSearchParams.q
@@ -31,6 +32,7 @@ export default async function DashboardUsersPage({
 
   return (
     <section className="flex mt-5 mb-5 gap-x-5 ">
+      <Toaster />
       <div className="flex flex-col w-full p-5 rounded-lg gap-y-5 bg-main-gray">
         <nav>
           <ul className="flex items-center justify-between gap-x-4>">

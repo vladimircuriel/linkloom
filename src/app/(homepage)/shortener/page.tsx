@@ -7,7 +7,6 @@ import { analyticsService } from '@lib/services/page'
 import { urlService } from '@lib/services/url'
 import { redirect } from 'next/navigation'
 import { Suspense } from 'react'
-import { Toaster } from 'react-hot-toast'
 
 const REVERSE = true
 
@@ -20,7 +19,6 @@ export default async function ShortenerPage() {
 
   return (
     <section className="py-8">
-      <Toaster />
       <div className="flex flex-col items-center justify-center gap-y-10">
         <h2 className="sr-only">All your shorten urls</h2>
         <UrlForms />

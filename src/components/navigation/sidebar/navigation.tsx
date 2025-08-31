@@ -2,7 +2,6 @@ import DashboardIcon from '@components/icons/DashboardIcon'
 import UrlsAnalyticsIcon from '@components/icons/UrlsAnalyticsIcon'
 import UrlsIcon from '@components/icons/UrlsIcon'
 import UserAnalyticsIcon from '@components/icons/UserAnalyticsIcon'
-import UserProfileIcon from '@components/icons/UserProfileIcon'
 import UsersIcon from '@components/icons/UsersIcon'
 import Routes from '@lib/constants/routes.constants'
 

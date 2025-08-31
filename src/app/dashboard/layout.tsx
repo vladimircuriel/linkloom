@@ -1,13 +1,11 @@
 import Background from '@components/background/Background'
 import Footer from '@components/navigation/footer/Footer'
-import DashboardNavbar from '@components/navigation/navbar/DashboardNavbar'
 import DashboardSidebar from '@components/navigation/sidebar/DashboardSidebar'
 import auth from '@lib/auth/auth'
 import { startup } from '@lib/bootstrap'
 import { userService } from '@lib/services/user'
 import type { Metadata } from 'next'
 import { Onest } from 'next/font/google'
-import { headers } from 'next/headers'
 
 import '../globals.css'
 import { redirect } from 'next/navigation'

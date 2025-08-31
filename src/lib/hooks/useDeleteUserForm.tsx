@@ -7,7 +7,14 @@ export default function useDeleteUserForm() {
 
   useEffect(() => {
     if (state?.success) {
-      toast.success('Successfully Deleted!')
+      toast('User Deleted Successfully!', {
+        icon: '✅',
+        style: {
+          borderRadius: '10px',
+          background: '#060b14',
+          color: '#fff',
+        },
+      })
     }
   }, [state, state?.success])
 

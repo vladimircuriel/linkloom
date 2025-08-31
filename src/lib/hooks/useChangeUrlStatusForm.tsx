@@ -8,7 +8,14 @@ export default function useChangeUrlStatusForm() {
 
   useEffect(() => {
     if (state?.success) {
-      toast.success('Successfully Status Changed!')
+      toast('Successfully Status Changed!', {
+        icon: '✅',
+        style: {
+          borderRadius: '10px',
+          background: '#060b14',
+          color: '#fff',
+        },
+      })
     }
   }, [state, state?.success])
 

@@ -5,6 +5,7 @@ import { urlService } from '@lib/services/url/index'
 import makeShortUrl from '@lib/utils/url'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
+import Routes from '../constants/routes.constants'
 
 // --- Schemas ---
 const createSchema = z.object({
@@ -35,7 +36,7 @@ export const createShortUrl = async (_prev: unknown, formData: FormData) => {
   try {
     const shortUrl = makeShortUrl()
     await urlService.createUrl({ originalUrl: parsed.data.originalUrl, shortUrl, userId })
-    revalidatePath('/shortener')
+    revalidatePath(Routes.SHORTENER)
     return { success: true }
   } catch (err) {
     throw new Error(`Create short URL failed: ${err}`)
@@ -53,7 +54,7 @@ export const changeUrlStatus = async (_prev: unknown, formData: FormData) => {
     if (!url) return { error: 'URL not found' }
 
     await urlService.updateUrl(parsed.data.urlId, { status: !(url as any).status } as any)
-    revalidatePath('/shortener')
+    revalidatePath(Routes.SHORTENER)
     return { success: true }
   } catch (err) {
     throw new Error(`Toggle URL status failed: ${err}`)
