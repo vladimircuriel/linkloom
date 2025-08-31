@@ -4,8 +4,6 @@ const Routes = {
   REGISTER: '/register',
   LOGIN: '/login',
   SHORTENER: '/shortener',
-  SETTINGS: '/settings',
-  USERS: '/users',
   LOGOUT: '/logout',
 } as const
 

@@ -76,9 +76,12 @@ export const createUser = async (_prev: unknown, formData: FormData) => {
 const editFormSchema = z.object({
   userId: z.string().regex(/^[a-f\d]{24}$/i, 'Invalid id'),
   name: z.string().min(1).optional(),
-  email: z.email().optional(),
+  email: z.string().email().optional(),
   username: z.string().min(1).optional(),
-  isAdmin: z.coerce.boolean().optional(),
+  isAdmin: z
+    .enum(['true', 'false'])
+    .transform((v) => v === 'true')
+    .optional(),
 })
 
 export const editUser = async (_prev: unknown, formData: FormData) => {
@@ -86,9 +89,13 @@ export const editUser = async (_prev: unknown, formData: FormData) => {
   const parsed = editFormSchema.safeParse(raw)
   if (!parsed.success) return { error: 'Invalid data' }
 
+  const { userId, ...rest } = parsed.data
+  const payload = Object.fromEntries(
+    Object.entries(rest).filter(([, v]) => v !== undefined && v !== ''),
+  ) as Partial<typeof rest>
+
   try {
-    const { userId, ...rest } = parsed.data
-    const updated = await userService.updateUser(userId, rest)
+    const updated = await userService.updateUser(userId, payload)
     if (!updated) return { error: 'User not found' }
   } catch (err) {
     throw new Error(`Update user failed: ${err}`)
