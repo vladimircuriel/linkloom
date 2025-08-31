@@ -9,7 +9,7 @@ export default function UrlForms() {
   const { state, formAction, isPending } = useUrlForm()
 
   return (
-    <>
+    <div className="w-full mb-6">
       <Toaster />
       <form
         action={formAction}
@@ -39,6 +39,6 @@ export default function UrlForms() {
         </div>
         {state?.error && <p className="text-red-500">{state.error}</p>}
       </form>
-    </>
+    </div>
   )
 }

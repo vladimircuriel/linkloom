@@ -2,20 +2,19 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 type usePaginationProps = Readonly<{
   count: number
+  itemPerPage?: number
 }>
 
-export default function usePagination({ count }: usePaginationProps) {
+export default function usePagination({ count, itemPerPage = 5 }: usePaginationProps) {
   const searchParameters = useSearchParams()
   const { replace } = useRouter()
   const pathname = usePathname()
 
   const page = searchParameters.get('page') || 1
   const parameters = new URLSearchParams(searchParameters)
-  // could be in an env file
-  const ITEM_PER_PAGE = 5
 
-  const hasPrevious = ITEM_PER_PAGE * (+page - 1) > 0
-  const hasNext = ITEM_PER_PAGE * (+page - 1) + ITEM_PER_PAGE < count
+  const hasPrevious = itemPerPage * (+page - 1) > 0
+  const hasNext = itemPerPage * (+page - 1) + itemPerPage < count
 
   const handleChangePage = (type: string) => {
     type === 'prev'
