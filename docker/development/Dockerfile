@@ -1,6 +1,6 @@
 # syntax=docker.io/docker/dockerfile:1
 
-FROM node:18-alpine AS base
+FROM node:22-alpine  AS base
 
 FROM base AS deps
 RUN apk add --no-cache libc6-compat
@@ -13,9 +13,16 @@ RUN corepack enable pnpm && pnpm i;
 FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
-COPY . .
+COPY src/ ./src
+COPY public/ ./public
+COPY next.config.ts ./
+COPY tsconfig.json ./
+COPY postcss.config.mjs ./
+COPY package.json  package.json
+COPY pnpm-lock.yaml pnpm-lock.yaml
 
-COPY .env.development .env.production
+COPY .env.local .env.production
+
 RUN corepack enable pnpm && pnpm run build
 
 FROM base AS runner

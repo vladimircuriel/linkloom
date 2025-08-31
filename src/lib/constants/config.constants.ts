@@ -17,3 +17,9 @@ export const URL_PREFIX = process.env.NEXT_URL_PREFIX
 export const LINK_PREVIEW_API_KEY = process.env.NEXT_LINK_PREVIEW_API_KEY
 export const ADMIN_EMAIL = process.env.NEXT_ADMIN_EMAIL
 export const ADMIN_PASSWORD = process.env.NEXT_ADMIN_PASSWORD
+export const PINO_HOST = process.env.NEXT_PINO_HOST
+export const PINO_BATCHING = process.env.NEXT_PINO_BATCHING === 'true'
+export const PINO_INTERVAL = process.env.NEXT_PINO_INTERVAL
+  ? parseInt(process.env.NEXT_PINO_INTERVAL, 10)
+  : 5
+export const PINO_LABEL = process.env.NEXT_PINO_LABEL || 'linkloom'
