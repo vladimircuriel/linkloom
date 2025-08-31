@@ -39,7 +39,7 @@ export default function EditUserForm({ user }: EditUserFormProps) {
         />
       </label>
       <label htmlFor="isAdmin">
-        <InputSelect name="isAdmin" admin={Boolean(user.isAdmin)} shadow />
+        <InputSelect name="isAdmin" admin={user.isAdmin} shadow />
       </label>
 
       <Button
