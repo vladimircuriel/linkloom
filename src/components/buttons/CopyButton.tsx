@@ -13,7 +13,14 @@ export default function CopyButton({ text }: CopyButtonProperties) {
       throw new Error(`Failed to copy text: ${error}`)
     })
 
-    toast.success('Copied to clipboard!')
+    toast('Copied to clipboard!', {
+      icon: '📋',
+      style: {
+        borderRadius: '10px',
+        background: '#060b14',
+        color: '#fff',
+      },
+    })
   }
 
   return (
