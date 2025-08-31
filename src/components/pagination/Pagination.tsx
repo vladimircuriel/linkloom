@@ -5,10 +5,11 @@ import usePagination from '@lib/hooks/usePagination'
 
 type PaginationProps = Readonly<{
   count?: number
+  itemPerPage?: number
 }>
 
-export default function Pagination({ count = 0 }: PaginationProps) {
-  const { hasPrevious, hasNext, handleChangePage } = usePagination({ count })
+export default function Pagination({ count = 0, itemPerPage = 5 }: PaginationProps) {
+  const { hasPrevious, hasNext, handleChangePage } = usePagination({ count, itemPerPage })
 
   return (
     <div className="flex items-center justify-between">

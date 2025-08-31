@@ -6,6 +6,7 @@ import { HOSTNAME } from '@lib/constants/config.constants'
 import type { UrlDoc } from '@lib/models/url/url.model'
 import formattedDate from '@lib/utils/date'
 import { getPreview } from '@lib/utils/preview'
+import truncateUrl from '@lib/utils/truncate'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -56,7 +57,7 @@ async function TableItem({ url }: TableIconProps) {
         </Link>
         <CopyButton text={`${HOSTNAME}/${shortUrl}`} />
       </td>
-      <td className="hidden max-w-md py-2 text-center truncate lg:table-cell border-btn-gray-border">
+      <td className="hidden max-w-md py-2 text-center lg:table-cell border-btn-gray-border">
         <div className="flex items-center justify-center gap-x-4">
           <Image src={preview} alt={`Preview de ${shortUrl}`} width={35} height={35} />
           <Link
@@ -65,7 +66,7 @@ async function TableItem({ url }: TableIconProps) {
             rel="noopener noreferrer"
             href={originalUrl}
           >
-            {originalUrl}
+            {truncateUrl(originalUrl)}
           </Link>
         </div>
       </td>

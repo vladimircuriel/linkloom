@@ -122,15 +122,52 @@ export class UrlService<
     return url ?? null
   }
 
-  async getUrlByUserId(userId: string, reverse = false): Promise<T[]> {
+  async getUrlByUserId({
+    userId,
+    limit = 10,
+    page = 1,
+    status,
+    reverse = false,
+    search,
+  }: {
+    userId: string
+    limit?: number
+    page?: number
+    status?: boolean
+    reverse?: boolean
+    search?: string
+  }): Promise<{ urls: T[]; total: number }> {
     await connectToDatabase()
+
+    const filter: Record<string, any> = { user: userId }
+
+    if (typeof status === 'boolean') {
+      filter.status = status
+    }
+
+    if (search && search.trim()) {
+      filter.originalUrl = { $regex: new RegExp(search.trim(), 'i') }
+    }
+
+    const total = await this.Url.countDocuments(filter)
+
+    const skip = (page - 1) * limit
+
     const [urls, err] = await to(
-      this.Url.find({ user: userId })
+      this.Url.find(filter)
         .sort({ _id: reverse ? -1 : 1 })
+        .skip(skip)
+        .limit(limit)
         .lean<T[]>(),
     )
-    if (err) throw new Error(`Error fetching urls by user: ${err}`)
-    return urls ?? []
+    if (err) {
+      throw new Error(`Error fetching urls by user: ${err}`)
+    }
+
+    return {
+      urls: urls ?? [],
+      total,
+    }
   }
 
   async getUrlByShortUrl(shortUrl: string): Promise<T | null> {
@@ -160,7 +197,6 @@ export class UrlService<
     return data
   }
 
-  // Siempre requiere usuario
   async createUrl(input: { originalUrl: string; shortUrl: string; userId: string }): Promise<T> {
     await connectToDatabase()
     const [created, err] = await to(
