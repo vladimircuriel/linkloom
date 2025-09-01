@@ -6,6 +6,7 @@ import { type NextRequest, NextResponse } from 'next/server'
 
 export const config = {
   matcher: ['/((?!api|_next/static|_next/image|.*\\.png$).*)'],
+  runtime: 'nodejs',
 }
 
 export default async function middleware(request: NextRequest) {
