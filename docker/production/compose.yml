@@ -33,7 +33,7 @@ services:
 
   grafana:
     container_name: linkloom-grafana
-    image: nightmarvco/linkloom-grafana:latest
+    image: nightmarevco/linkloom-grafana:latest
     restart: always
     environment:
       GF_SECURITY_ADMIN_USER: ${GF_SECURITY_ADMIN_USER}
@@ -73,7 +73,7 @@ services:
 
   prometheus:
     container_name: linkloom-prometheus
-    image: nightmarvco/linkloom-prometheus:latest
+    image: nightmarevco/linkloom-prometheus:latest
     restart: always
     volumes:
       - prometheus-data:/prometheus
@@ -93,7 +93,7 @@ services:
 
   frontend:
     container_name: linkloom-frontend
-    image: nightmarvco/linkloom:latest
+    image: nightmarevco/linkloom:latest
     restart: always
     depends_on:
       db:
