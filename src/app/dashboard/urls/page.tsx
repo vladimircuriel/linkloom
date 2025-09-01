@@ -48,7 +48,7 @@ export default async function DashboardUrls({
           {urls?.map((url) => (
             <tr key={url._id.toString()}>
               <td className="p-3 text-start max-w-10">
-                <Link href={`/url/${url.shortUrl}`} rel="noopener" target="_blank">
+                <Link href={`/${url.shortUrl}`} rel="noopener" target="_blank">
                   <span className="transition hover:underline hover:text-main-blue-active">
                     {url.shortUrl}
                   </span>

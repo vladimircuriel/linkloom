@@ -1,3 +1,4 @@
+import ApplySearchButton from '@components/buttons/ApplySearchButton'
 import UrlForms from '@components/forms/UrlForm'
 import InputStatusSelect from '@components/inputs/InputStatusSelect'
 import SearchInput from '@components/inputs/SearchInput'
@@ -47,20 +48,19 @@ export default async function ShortenerPage({
         <h2 className="sr-only">All your shorten urls</h2>
         <UrlForms />
 
-        {total > 0 && (
-          <>
-            <div className="flex items-center justify-between w-full px-2 mb-4">
-              <SearchInput placeholder="Search your links..." originalDesign={false} />
-              <InputStatusSelect />
-            </div>
-            <Suspense fallback={<TableSkelton />}>
-              <UrlsTable urls={urls} />
-            </Suspense>
-            <div className="flex flex-col w-full px-5 mt-4">
-              <Pagination count={total} itemPerPage={PER_PAGE} />
-            </div>
-          </>
-        )}
+        <div className="hidden md:flex items-center justify-between w-full px-2 mb-4">
+          <SearchInput placeholder="Search your links..." originalDesign={false} />
+          <div className="flex items-center gap-x-2">
+            <InputStatusSelect />
+            <ApplySearchButton />
+          </div>
+        </div>
+        <Suspense fallback={<TableSkelton />}>
+          <UrlsTable urls={urls} />
+        </Suspense>
+        <div className="hidden md:flex flex-col w-full px-5 mt-4">
+          <Pagination count={total} itemPerPage={PER_PAGE} />
+        </div>
       </div>
     </section>
   )

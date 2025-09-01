@@ -20,7 +20,7 @@ export default function usePagination({ count, itemPerPage = 5 }: usePaginationP
     type === 'prev'
       ? parameters.set('page', (+page - 1).toString())
       : parameters.set('page', (+page + 1).toString())
-    replace(`${pathname}?${parameters}`)
+    window.location.href = `${pathname}?${parameters.toString()}`
   }
 
   return { hasPrevious, hasNext, handleChangePage }

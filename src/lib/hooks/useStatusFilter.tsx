@@ -1,24 +1,25 @@
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useDebouncedCallback } from 'use-debounce'
+import { useSearchParams } from 'next/navigation'
+import { useCallback } from 'react'
 
 export function useStatusFilter() {
   const searchParameters = useSearchParams()
-  const { replace } = useRouter()
-  const pathname = usePathname()
 
-  const handleStatusChange = useDebouncedCallback((event: React.ChangeEvent<HTMLSelectElement>) => {
-    const params = new URLSearchParams(searchParameters)
+  const handleStatusChange = useCallback(
+    (event: React.ChangeEvent<HTMLSelectElement>) => {
+      const parameters = new URLSearchParams(searchParameters)
 
-    params.set('page', '1')
+      parameters.set('page', '1')
 
-    if (event.target.value) {
-      params.set('s', event.target.value)
-    } else {
-      params.delete('s')
-    }
+      if (event.target.value) {
+        parameters.set('s', event.target.value)
+      } else {
+        parameters.delete('s')
+      }
 
-    replace(`${pathname}?${params.toString()}`)
-  }, 25)
+      window.history.pushState({}, '', `${window.location.pathname}?${parameters.toString()}`)
+    },
+    [searchParameters],
+  )
 
   return { handleStatusChange }
 }

@@ -2,7 +2,6 @@
 
 import SearchIcon from '@components/icons/SearchIcon'
 import { useSearchInput } from '@lib/hooks/useSearchInput'
-import React from 'react'
 
 type SearchProperties = {
   placeholder: string
@@ -17,7 +16,7 @@ export default function SearchInput({
   shadow = false,
   className = '',
 }: SearchProperties) {
-  const { handleSearch } = useSearchInput()
+  const { handleSearch, searchParameters } = useSearchInput()
 
   if (originalDesign) {
     return (
@@ -30,6 +29,12 @@ export default function SearchInput({
           placeholder={placeholder}
           className="w-40 bg-transparent border-none text-main-dark-white focus:outline-none"
           onChange={handleSearch}
+          defaultValue={searchParameters.get('q') || ''}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              window.location.reload()
+            }
+          }}
         />
       </div>
     )
@@ -51,8 +56,14 @@ export default function SearchInput({
       <input
         type="text"
         placeholder={placeholder}
-        onChange={handleSearch}
         className="flex-1 bg-transparent border-none focus:outline-none caret-main-pink text-main-dark-white"
+        onChange={handleSearch}
+        defaultValue={searchParameters.get('q') || ''}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            window.location.reload()
+          }
+        }}
       />
     </div>
   )

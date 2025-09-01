@@ -1,22 +1,20 @@
+'use client'
+
 import Logo from '@components/brand/logo/Logo'
 import Button from '@components/buttons/Button'
 import LoginIcon from '@components/icons/LoginIcon'
 import { logout } from '@lib/actions/auth.action'
 import Routes from '@lib/constants/routes.constants'
-import { headers } from 'next/headers'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 type NavbarProps = Readonly<{
   authenticated: boolean
   adminPermissions: boolean
 }>
 
-export default async function Navbar({
-  authenticated = false,
-  adminPermissions = false,
-}: NavbarProps) {
-  const headersList = await headers()
-  const pathname = headersList.get('x-pathname')
+export default function Navbar({ authenticated = false, adminPermissions = false }: NavbarProps) {
+  const pathname = usePathname()
   const isOnShortener = pathname === Routes.SHORTENER
 
   return (

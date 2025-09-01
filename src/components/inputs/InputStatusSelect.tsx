@@ -1,7 +1,6 @@
 'use client'
 
 import { useStatusFilter } from '@lib/hooks/useStatusFilter'
-import React from 'react'
 
 type StatusSelectProps = {
   className?: string
