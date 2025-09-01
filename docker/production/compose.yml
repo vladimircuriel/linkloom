@@ -45,6 +45,8 @@ services:
         condition: service_healthy
       prometheus:
         condition: service_healthy
+      frontend:
+        condition: service_healthy
     networks:
       - linkloom-traefik
     labels:
@@ -100,8 +102,10 @@ services:
         condition: service_healthy
       loki:
         condition: service_healthy
+      prometheus:
+        condition: service_healthy
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      test: ["CMD", "wget", "--spider", "--timeout=5", "--tries=1", "http://linkloom-frontend:3000/api/heatlh"]
       interval: 15s
       timeout: 5s
       retries: 3

@@ -118,5 +118,6 @@ jobs:
           script: |
             cd /usr/local/app/
             echo "${{ secrets.ENV_PRODUCTION }}" > .env
+            docker network create linkloom-traefik || true
             docker compose pull
             docker compose up -d
