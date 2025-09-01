@@ -59,7 +59,7 @@ services:
 
   loki:
     container_name: linkloom-loki
-    image: nightmarvco/linkloom-loki:latest
+    image: nightmarevco/linkloom-loki:latest
     restart: always
     command: -config.file=/etc/loki/local-config.yaml
     healthcheck:
