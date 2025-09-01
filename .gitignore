@@ -43,4 +43,3 @@ next-env.d.ts
 .vscode/*
 
 docker/production/compose.yml
-loki/production/

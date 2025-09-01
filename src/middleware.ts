@@ -6,7 +6,6 @@ import { type NextRequest, NextResponse } from 'next/server'
 
 export const config = {
   matcher: ['/((?!api|_next/static|_next/image|.*\\.png$).*)'],
-  runtime: 'nodejs',
 }
 
 export default async function middleware(request: NextRequest) {
@@ -69,13 +68,6 @@ export default async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL(Routes.LOGIN, url))
   }
 
-  const requestHeaders = new Headers(request.headers)
-  requestHeaders.set('x-pathname', path)
-
-  const response = NextResponse.next({
-    request: { headers: requestHeaders },
-  })
-
   globalThis.logger?.info({
     meta: {
       requestId,
@@ -87,5 +79,5 @@ export default async function middleware(request: NextRequest) {
     message: 'Middleware processed request',
   })
 
-  return response
+  return NextResponse.next()
 }
