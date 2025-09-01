@@ -33,14 +33,13 @@ services:
 
   grafana:
     container_name: linkloom-grafana
-    image: grafana/grafana:latest
+    image: nightmarvco/linkloom-grafana:latest
     restart: always
     environment:
       GF_SECURITY_ADMIN_USER: ${GF_SECURITY_ADMIN_USER}
       GF_SECURITY_ADMIN_PASSWORD: ${GF_SECURITY_ADMIN_PASSWORD}
     volumes:
       - grafana-data:/var/lib/grafana
-      - ./grafana/provisioning:/etc/grafana/provisioning
     depends_on:
       loki:
         condition: service_healthy
@@ -60,11 +59,9 @@ services:
 
   loki:
     container_name: linkloom-loki
-    image: grafana/loki:2.9.2
+    image: nightmarvco/linkloom-loki:latest
     restart: always
     command: -config.file=/etc/loki/local-config.yaml
-    volumes:
-      - ./loki/production/loki-config.yaml/:/etc/loki/local-config.yaml
     healthcheck:
       test: wget --quiet --tries=1 --output-document=- http://localhost:3100/ready | grep -q -w ready || exit 1
       start_period: 20s
@@ -76,10 +73,9 @@ services:
 
   prometheus:
     container_name: linkloom-prometheus
-    image: prom/prometheus:latest
+    image: nightmarvco/linkloom-prometheus:latest
     restart: always
     volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prometheus-data:/prometheus
     healthcheck:
       test: ["CMD", "wget", "--spider", "--quiet", "--tries=1", "--timeout=5", "http://localhost:9090/-/ready"]
@@ -146,14 +142,14 @@ services:
     image: mongo-express:1.0.0
     restart: always
     environment:
-      ME_CONFIG_BASICAUTH: ${ME_CONFIG_BASICAUTH}
+      ME_CONFIG_BASICAUTH: true
+      ME_CONFIG_MONGODB_SERVER: db
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_MONGODB_AUTH_DATABASE: admin
       ME_CONFIG_BASICAUTH_USERNAME: ${ME_CONFIG_BASICAUTH_USERNAME}
       ME_CONFIG_BASICAUTH_PASSWORD: ${ME_CONFIG_BASICAUTH_PASSWORD}
       ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-      ME_CONFIG_MONGODB_SERVER: ${ME_CONFIG_MONGODB_SERVER}
-      ME_CONFIG_MONGODB_AUTH_DATABASE: ${MONGO_INITDB_DATABASE}
-      ME_CONFIG_MONGODB_PORT: 27017
     depends_on:
       db:
         condition: service_healthy
