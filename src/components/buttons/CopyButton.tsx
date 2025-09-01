@@ -24,7 +24,7 @@ export default function CopyButton({ text }: CopyButtonProperties) {
   }
 
   return (
-    <button type="button" onClick={() => handleCopy(text)}>
+    <button type="button" onClick={() => handleCopy(`https://${text}`)}>
       <CopyIcon />
     </button>
   )
