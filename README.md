@@ -96,7 +96,7 @@ A more extensive showcase in available in [my portfolio](https://vladimircuriel.
 
 ### Prerequisites
 
-- **Docker** and **Docker Compose**
+- **Docker**
 
 ### Steps
 
