@@ -59,7 +59,7 @@
 
 https://github.com/user-attachments/assets/701c0fa4-eb61-4af8-809f-43de3f253d9c
 
-A more extensive showcase in available in [my portfolio](https://vladimircuriel.com/posts/1_linkloom/)!
+A more extensive showcase is available in [my portfolio](https://vladimircuriel.com/posts/1_linkloom/)!
 
 ## Tools Used
 
