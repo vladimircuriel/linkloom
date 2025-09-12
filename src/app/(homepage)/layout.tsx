@@ -37,6 +37,7 @@ export default async function RootLayout({
         <header>
           <Navbar authenticated={!!userPayload} adminPermissions={userPayload?.isAdmin ?? false} />
         </header>
+        
         <main className="flex-1">{children}</main>
 
         <Footer />
