@@ -11,7 +11,7 @@
 	},
 	"dependencies": {
 		"bcryptjs": "3.0.2",
-		"framer-motion": "12.23.12",
+		"framer-motion": "12.23.22",
 		"jose": "6.1.0",
 		"mongoose": "8.19.1",
 		"next": "15.5.2",
