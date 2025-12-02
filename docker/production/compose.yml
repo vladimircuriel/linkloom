@@ -171,7 +171,7 @@ services:
 
   mongo-prometheus:
     container_name: linkloom-mongo-exporter
-    image: bitnami/mongodb-exporter:0.47.0
+    image: bitnamilegacy/mongodb-exporter:0.47.0
     restart: unless-stopped
     environment:
       MONGODB_URI: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@db:27017/admin
