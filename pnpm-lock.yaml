@@ -48,8 +48,8 @@ importers:
         specifier: 10.0.6
         version: 10.0.6(react@19.2.3)
       zod:
-        specifier: 4.1.13
-        version: 4.1.13
+        specifier: 4.2.0
+        version: 4.2.0
     devDependencies:
       '@biomejs/biome':
         specifier: 2.3.9
@@ -1009,8 +1009,8 @@ packages:
   wrappy@1.0.2:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
 
-  zod@4.1.13:
-    resolution: {integrity: sha512-AvvthqfqrAhNH9dnfmrfKzX5upOdjUVJYFqNSlkmGf64gRaTzlPwz99IHYnVs28qYAybvAlBV+H7pn0saFY4Ig==}
+  zod@4.2.0:
+    resolution: {integrity: sha512-Bd5fw9wlIhtqCCxotZgdTOMwGm1a0u75wARVEY9HMs1X17trvA/lMi4+MGK5EUfYkXVTbX8UDiDKW4OgzHVUZw==}
 
 snapshots:
 
@@ -1802,4 +1802,4 @@ snapshots:
 
   wrappy@1.0.2: {}
 
-  zod@4.1.13: {}
+  zod@4.2.0: {}
