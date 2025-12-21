@@ -1,0 +1,156 @@
+services:
+  grafana:
+    image: nightmarevco/linkloom-grafana:latest
+    pull_policy: always
+    restart: always
+    ports:
+      - 3000
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GF_SECURITY_ADMIN_USER}
+      GF_SECURITY_ADMIN_PASSWORD: ${GF_SECURITY_ADMIN_PASSWORD}
+    volumes:
+      - grafana-data:/var/lib/grafana
+    depends_on:
+      loki:
+        condition: service_healthy
+      prometheus:
+        condition: service_healthy
+      frontend:
+        condition: service_healthy
+    networks:
+      - internal
+      - dokploy-network
+
+  frontend:
+    image: nightmarevco/linkloom:latest
+    pull_policy: always
+    restart: always
+    ports:
+      - 3000
+    depends_on:
+      db:
+        condition: service_healthy
+      loki:
+        condition: service_healthy
+      prometheus:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--spider",
+          "--timeout=5",
+          "--tries=1",
+          "http://frontend:3000/api/heatlh",
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    networks:
+      - internal
+      - dokploy-network
+
+  db-studio:
+    image: mongo-express:1.0.0
+    restart: always
+    environment:
+      ME_CONFIG_BASICAUTH: true
+      ME_CONFIG_MONGODB_SERVER: db
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_MONGODB_AUTH_DATABASE: admin
+      ME_CONFIG_BASICAUTH_USERNAME: ${ME_CONFIG_BASICAUTH_USERNAME}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${ME_CONFIG_BASICAUTH_PASSWORD}
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - internal
+
+  db:
+    image: mongo:8.0
+    restart: always
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - internal
+
+  loki:
+    image: nightmarevco/linkloom-loki:latest
+    pull_policy: always
+    restart: always
+    command: -config.file=/etc/loki/local-config.yaml
+    healthcheck:
+      test: wget --quiet --tries=1 --output-document=- http://localhost:3100/ready | grep -q -w ready || exit 1
+      start_period: 20s
+      interval: 10s
+      timeout: 1s
+      retries: 12
+    networks:
+      - internal
+
+  prometheus:
+    image: nightmarevco/linkloom-prometheus:latest
+    pull_policy: always
+    restart: always
+    volumes:
+      - prometheus-data:/prometheus
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--spider",
+          "--quiet",
+          "--tries=1",
+          "--timeout=5",
+          "http://localhost:9090/-/ready",
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 60s
+    depends_on:
+      loki:
+        condition: service_healthy
+      mongo-prometheus:
+        condition: service_started
+    networks:
+      - internal
+
+  mongo-prometheus:
+    image: bitnamilegacy/mongodb-exporter:0.47.0
+    restart: unless-stopped
+    environment:
+      MONGODB_URI: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@db:27017/admin
+    command:
+      - --web.listen-address=:9216
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - internal
+
+volumes:
+  mongo-data: {}
+  grafana-data: {}
+  prometheus-data: {}
+
+networks:
+  internal:
+    driver: bridge
+  dokploy-network:
+    external: true
