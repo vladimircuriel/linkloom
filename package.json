@@ -1,7 +1,7 @@
 {
 	"name": "linkloom",
 	"description": "Linkloom is a URL shortener with QR integration, statistics in a modern UI.",
-	"version": "2.0.0",
+	"version": "2.0.5",
 	"private": true,
 	"scripts": {
 		"dev": "next dev --turbopack",
