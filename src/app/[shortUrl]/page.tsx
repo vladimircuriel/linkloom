@@ -1,3 +1,4 @@
+import { HOSTNAME } from '@lib/constants/config.constants'
 import Routes from '@lib/constants/routes.constants'
 import { analyticsService } from '@lib/services/page'
 import { urlService } from '@lib/services/url'
@@ -36,7 +37,7 @@ export default async function ShortUrlPage({
   if (qr) {
     return (
       <Image
-        src={`https://api.qrserver.com/v1/create-qr-code/?size=350x350&data=${shortUrl}`}
+        src={`https://api.qrserver.com/v1/create-qr-code/?size=350x350&data=https://${HOSTNAME}/${shortUrl}`}
         alt="QR Code"
         width={350}
         height={350}
